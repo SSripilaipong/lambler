@@ -11,5 +11,5 @@ def test_should_pull_event_data():
     resp = requests.get(fn.url)
     assert resp.status_code == 200
 
-    with open("./tests/test_api/test_get/event_data/simple.json", "w") as file:
+    with open("./tests/test_http/test_get/event_data/simple.json", "w") as file:
         file.write(resp.text)

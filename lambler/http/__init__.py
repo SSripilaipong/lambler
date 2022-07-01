@@ -1,1 +1,1 @@
-from ._endpoint import HttpEndpoint
+from ._router import HttpRouter

@@ -1,21 +1,13 @@
-from typing import Callable, Any, TypeVar, Dict, List
-
-from lambler.base import Handler
-
-T = TypeVar("T", bound=Callable)
+from typing import Callable, Dict, Any
 
 
-class HttpEndpoint(Handler):
-    def __init__(self):
-        self._handlers: List[Callable] = []
+class Endpoint:
+    def __init__(self, path: str, f: Callable):
+        self._path = path
+        self._f = f
 
-    def get(self, method: str) -> Callable[[Callable], Any]:
-        def decorator(f: T) -> T:
-            self._handlers.append(f)
-            return f
+    def execute(self, event: Dict, context: Any):
+        self._f()
 
-        return decorator
-
-    def handle(self, event: Dict, context: Any):
-        for handler in self._handlers:
-            handler()
+    def match(self, event: Dict, context: Any) -> bool:
+        return event["rawPath"] == self._path

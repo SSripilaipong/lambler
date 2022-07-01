@@ -1,11 +1,11 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 
 from .base import Handler
 
 
 class Lambler:
     def __init__(self):
-        self._handlers: Optional[List[Handler]] = None
+        self._handlers: List[Handler] = []
 
     def use(self, *handlers: Handler):
         self._handlers = handlers

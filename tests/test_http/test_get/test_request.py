@@ -1,19 +1,41 @@
-import json
-
 from lambler import Lambler
-from lambler.http import HttpEndpoint
+from lambler.http import HttpRouter
+from tests.test_http.test_get.factory import make_get_request
 
 
-def test_should_call_handler():
-    endpoint = HttpEndpoint()
+def test_should_call_endpoint():
+    router = HttpRouter()
 
-    @endpoint.get("/")
-    def handle():
-        handle.is_called = True
+    @router.get("/")
+    def endpoint():
+        endpoint.is_called = True
 
-    handle.is_called = False
+    lambler = Lambler()
+    lambler.use(router)
 
-    with open("./tests/test_http/test_get/event_data/simple.json", "r") as file:
-        Lambler().use(endpoint)(json.load(file), ...)
+    endpoint.is_called = False
+    lambler(make_get_request("/"), ...)
+    assert endpoint.is_called
 
-    assert handle.is_called
+
+def test_should_select_endpoint_by_path():
+    router = HttpRouter()
+
+    @router.get("/1")
+    def endpoint1():
+        endpoint1.is_called = True
+
+    @router.get("/2")
+    def endpoint2():
+        endpoint2.is_called = True
+
+    lambler = Lambler()
+    lambler.use(router)
+
+    endpoint1.is_called = endpoint2.is_called = False
+    lambler(make_get_request("/1"), ...)
+    assert endpoint1.is_called and not endpoint2.is_called
+
+    endpoint1.is_called = endpoint2.is_called = False
+    lambler(make_get_request("/2"), ...)
+    assert not endpoint1.is_called and endpoint2.is_called

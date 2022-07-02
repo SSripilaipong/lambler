@@ -1,6 +1,6 @@
 from lambler import Lambler
 from lambler.http import HttpApi
-from tests.test_http.test_get.factory import simple_get_request
+from tests.test_http.factory import simple_get_request
 
 
 def test_should_call_endpoint():

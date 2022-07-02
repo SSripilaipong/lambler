@@ -15,19 +15,24 @@ class Endpoint:
         self._f(**params)
 
     def match(self, event: Dict, context: Any) -> bool:
-        return event["rawPath"] == self._path
+        return _extract_path(event) == self._path
 
     def _extract_params(self, event: Dict) -> Dict[str, Any]:
         if len(self._signature.parameters) == 0:
             return {}
 
+        params = {}
         for name, param in self._signature.parameters.items():
             marker = param.default
             if isinstance(marker, Header):
-                return {name: _extract_header(event, marker.key)}
+                params[name] = _extract_header(event, marker.key)
 
-        return {}
+        return params
 
 
 def _extract_header(event: Dict, key: str) -> Any:
     return event["headers"][key]
+
+
+def _extract_path(event: Dict) -> str:
+    return event["rawPath"]

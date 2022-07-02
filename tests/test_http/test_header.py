@@ -16,3 +16,19 @@ def test_should_pass_specified_header_value_from_key():
     endpoint.my_name = None
     lambler(simple_get_request("", extra_headers={"my-name": "CopyPasteEng"}), ...)
     assert endpoint.my_name == "CopyPasteEng"
+
+
+def test_should_pass_multiple_header_values():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(a: str = Header("my-a"), b: str = Header("my-b")):
+        endpoint.a = a
+        endpoint.b = b
+
+    lambler = Lambler()
+    lambler.use(api)
+
+    endpoint.a = endpoint.b = None
+    lambler(simple_get_request("", extra_headers={"my-a": "this is a", "my-b": "this is b"}), ...)
+    assert endpoint.a == "this is a" and endpoint.b == "this is b"

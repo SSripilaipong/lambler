@@ -1,17 +1,17 @@
 from lambler import Lambler
-from lambler.http import HttpRouter
+from lambler.http import HttpApi
 from tests.test_http.test_get.factory import simple_get_request
 
 
 def test_should_call_endpoint():
-    router = HttpRouter()
+    api = HttpApi()
 
-    @router.get("/")
+    @api.get("/")
     def endpoint():
         endpoint.is_called = True
 
     lambler = Lambler()
-    lambler.use(router)
+    lambler.use(api)
 
     endpoint.is_called = False
     lambler(simple_get_request("/"), ...)
@@ -19,18 +19,18 @@ def test_should_call_endpoint():
 
 
 def test_should_select_endpoint_by_path():
-    router = HttpRouter()
+    api = HttpApi()
 
-    @router.get("/1")
+    @api.get("/1")
     def endpoint1():
         endpoint1.is_called = True
 
-    @router.get("/2")
+    @api.get("/2")
     def endpoint2():
         endpoint2.is_called = True
 
     lambler = Lambler()
-    lambler.use(router)
+    lambler.use(api)
 
     endpoint1.is_called = endpoint2.is_called = False
     lambler(simple_get_request("/1"), ...)

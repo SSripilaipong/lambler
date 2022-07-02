@@ -6,7 +6,7 @@ from lambler.http._endpoint import Endpoint
 T = TypeVar("T", bound=Callable)
 
 
-class HttpRouter(Handler):
+class HttpApi(Handler):
     def __init__(self):
         self._endpoints: List[Endpoint] = []
 

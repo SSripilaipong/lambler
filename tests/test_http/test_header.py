@@ -1,3 +1,5 @@
+from pytest import raises
+
 from lambler import Lambler
 from lambler.http import HttpApi, Header
 from tests.test_http.factory import simple_get_request
@@ -32,3 +34,14 @@ def test_should_pass_multiple_header_values():
     endpoint.a = endpoint.b = None
     lambler(simple_get_request("", extra_headers={"my-a": "this is a", "my-b": "this is b"}), ...)
     assert endpoint.a == "this is a" and endpoint.b == "this is b"
+
+
+def test_should_raise_TypeError_when_type_annotation_is_not_string():
+    api = HttpApi()
+
+    with raises(TypeError) as e:
+        @api.get("")
+        def endpoint(_: int = Header("my-a")):
+            pass
+
+    assert str(e.value) == "Header marker can only be used with type 'str'"

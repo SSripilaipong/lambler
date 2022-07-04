@@ -5,10 +5,16 @@ from ._header import Header
 
 
 class Endpoint:
-    def __init__(self, path: str, f: Callable):
+    def __init__(self, path: str, f: Callable, signature: inspect.Signature):
         self._path = path
         self._f = f
-        self._signature = inspect.signature(self._f)
+        self._signature = signature
+
+    @classmethod
+    def create(cls, path: str, f: Callable) -> 'Endpoint':
+        signature = inspect.signature(f)
+        _validate_markers(signature)
+        return cls(path, f, signature)
 
     def execute(self, event: Dict, context: Any):
         params = self._extract_params(event)
@@ -25,13 +31,17 @@ class Endpoint:
         for name, param in self._signature.parameters.items():
             marker = param.default
             if isinstance(marker, Header):
-                params[name] = _extract_header(event, marker.key)
+                params[name] = marker.extract_event(event)
 
         return params
 
 
-def _extract_header(event: Dict, key: str) -> Any:
-    return event["headers"][key]
+def _validate_markers(signature: inspect.Signature):
+    for name, param in signature.parameters.items():
+        marker = param.default
+
+        if isinstance(marker, Header):
+            marker.validate_param(param)
 
 
 def _extract_path(event: Dict) -> str:

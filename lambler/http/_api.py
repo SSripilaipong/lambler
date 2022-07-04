@@ -12,7 +12,7 @@ class HttpApi(Handler):
 
     def get(self, path: str) -> Callable[[Callable], Any]:
         def decorator(f: T) -> T:
-            self._endpoints.append(Endpoint(path, f))
+            self._endpoints.append(Endpoint.create(path, f))
             return f
 
         return decorator

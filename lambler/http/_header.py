@@ -1,6 +1,8 @@
 import inspect
 from typing import Any
 
+from lambler.http._event import HttpEvent
+
 
 class Header:
     def __init__(self, key: str):
@@ -16,5 +18,5 @@ class Header:
         if not issubclass(type_, str):
             raise TypeError("Header marker can only be used with type 'str'")
 
-    def extract_event(self, event) -> Any:
-        return event["headers"][self._key]
+    def extract_event(self, event: HttpEvent) -> Any:
+        return event.headers[self._key]

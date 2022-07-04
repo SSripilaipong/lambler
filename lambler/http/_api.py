@@ -19,6 +19,7 @@ class HttpApi(Handler):
 
     def handle(self, event: Dict, context: Any):
         for endpoint in self._endpoints:
-            if endpoint.match(event, context):
-                endpoint.execute(event, context)
+            executor = endpoint.match(event, context)
+            if executor is not None:
+                executor.execute()
                 break

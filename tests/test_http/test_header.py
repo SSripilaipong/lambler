@@ -13,7 +13,7 @@ def test_should_pass_specified_header_value_from_key():
         endpoint.my_name = my_name
 
     lambler = Lambler()
-    lambler.use(api)
+    lambler.handle(api)
 
     endpoint.my_name = None
     lambler(simple_get_request("", extra_headers={"my-name": "CopyPasteEng"}), ...)
@@ -29,7 +29,7 @@ def test_should_pass_multiple_header_values():
         endpoint.b = b
 
     lambler = Lambler()
-    lambler.use(api)
+    lambler.handle(api)
 
     endpoint.a = endpoint.b = None
     lambler(simple_get_request("", extra_headers={"my-a": "this is a", "my-b": "this is b"}), ...)

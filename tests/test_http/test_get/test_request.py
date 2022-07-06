@@ -11,7 +11,7 @@ def test_should_call_endpoint():
         endpoint.is_called = True
 
     lambler = Lambler()
-    lambler.use(api)
+    lambler.handle(api)
 
     endpoint.is_called = False
     lambler(simple_get_request("/"), ...)
@@ -30,7 +30,7 @@ def test_should_select_endpoint_by_path():
         endpoint2.is_called = True
 
     lambler = Lambler()
-    lambler.use(api)
+    lambler.handle(api)
 
     endpoint1.is_called = endpoint2.is_called = False
     lambler(simple_get_request("/1"), ...)

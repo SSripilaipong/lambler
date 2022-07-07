@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict
 
-from lambler.content import ContentProvider
+from lambler.content import ContentProviderSpace
 
 
 class Handler(ABC):
@@ -10,5 +10,5 @@ class Handler(ABC):
         pass
 
     @abstractmethod
-    def set_content_provider(self, provider: ContentProvider):
+    def set_content_provider_space(self, providers: ContentProviderSpace):
         pass

@@ -41,7 +41,7 @@ def test_should_load_content_with_key_with_handle_call_after_use_content_call():
 
 
 # noinspection PyPep8Naming
-def test_should_load_with_None_scope_when_not_specified():
+def test_should_load_from_provider_in_None_scope_by_default():
     api = HttpApi()
 
     @api.get("")
@@ -51,15 +51,15 @@ def test_should_load_with_None_scope_when_not_specified():
     provider = ContentProviderMock()
 
     lambler = Lambler()
-    lambler.use_content(provider)
+    lambler.use_content({None: provider})
     lambler.handle(api)
 
     provider.load__scope = "something"
     lambler(simple_get_request(""), ...)
-    assert provider.load__scope is None
+    assert provider.load__is_called
 
 
-def test_should_load_with_custom_scope():
+def test_should_load_from_provider_with_custom_scope():
     api = HttpApi()
 
     @api.get("")
@@ -69,8 +69,8 @@ def test_should_load_with_custom_scope():
     provider = ContentProviderMock()
 
     lambler = Lambler()
-    lambler.use_content(provider)
+    lambler.use_content({"here": provider})
     lambler.handle(api)
 
     lambler(simple_get_request(""), ...)
-    assert provider.load__scope == "here"
+    assert provider.load__is_called

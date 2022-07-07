@@ -21,3 +21,20 @@ def test_should_load_content_with_key():
 
     lambler(simple_get_request(""), ...)
     assert provider.load__key == "my-content"
+
+
+def test_should_load_content_with_key_with_handle_call_after_use_content_call():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(_: str = Content("my-content")):
+        pass
+
+    provider = ContentProviderMock()
+
+    lambler = Lambler()
+    lambler.use_content(provider)
+    lambler.handle(api)
+
+    lambler(simple_get_request(""), ...)
+    assert provider.load__key == "my-content"

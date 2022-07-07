@@ -74,3 +74,24 @@ def test_should_load_from_provider_with_custom_scope():
 
     lambler(simple_get_request(""), ...)
     assert provider.load__is_called
+
+
+def test_should_load_only_from_provider_with_specified_scope():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(_: str = Content("my-content", scope="here")):
+        pass
+
+    provider1 = ContentProviderMock()
+    provider2 = ContentProviderMock()
+
+    lambler = Lambler()
+    lambler.use_content({
+        "not here": provider2,
+        "here": provider1,
+    })
+    lambler.handle(api)
+
+    lambler(simple_get_request(""), ...)
+    assert provider1.load__is_called and not provider2.load__is_called

@@ -1,7 +1,8 @@
 from typing import Callable, Any, TypeVar, Dict, List
 
 from lambler.base import Handler
-from lambler.http._endpoint import Endpoint
+from ._endpoint import Endpoint
+from ..content import ContentProvider
 
 T = TypeVar("T", bound=Callable)
 
@@ -16,6 +17,10 @@ class HttpApi(Handler):
             return f
 
         return decorator
+
+    def set_content_provider(self, provider: ContentProvider):
+        for endpoint in self._endpoints:
+            endpoint.set_content_provider(provider)
 
     def handle(self, event: Dict, context: Any):
         for endpoint in self._endpoints:

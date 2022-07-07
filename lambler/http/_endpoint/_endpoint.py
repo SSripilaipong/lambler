@@ -4,6 +4,7 @@ from typing import Callable, Dict, Any, Optional
 from ._executor import EndpointExecutor
 from .._event import HttpEvent
 from .._header import Header
+from ...content import ContentProvider
 
 
 class Endpoint:
@@ -11,6 +12,8 @@ class Endpoint:
         self._path = path
         self._f = f
         self._signature = signature
+
+        self._content_provider: Optional[ContentProvider] = None
 
     @classmethod
     def create(cls, path: str, f: Callable) -> 'Endpoint':
@@ -23,7 +26,10 @@ class Endpoint:
         if http_event.path != self._path:
             return None
 
-        return EndpointExecutor(self._f, self._signature, http_event)
+        return EndpointExecutor(self._f, self._signature, http_event, content_provider=self._content_provider)
+
+    def set_content_provider(self, provider: ContentProvider):
+        self._content_provider = provider
 
 
 def _validate_markers(signature: inspect.Signature):

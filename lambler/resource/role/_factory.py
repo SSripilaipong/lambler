@@ -1,3 +1,4 @@
+# noinspection PyPackageRequirements
 import boto3
 
 from ._manager import RoleManager

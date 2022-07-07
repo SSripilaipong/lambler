@@ -1,3 +1,4 @@
+# noinspection PyPackageRequirements
 from pytest import raises
 
 from lambler import Lambler
@@ -36,6 +37,7 @@ def test_should_pass_multiple_header_values():
     assert endpoint.a == "this is a" and endpoint.b == "this is b"
 
 
+# noinspection PyPep8Naming
 def test_should_raise_TypeError_when_type_annotation_is_not_string():
     api = HttpApi()
 

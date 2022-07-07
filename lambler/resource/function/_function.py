@@ -1,5 +1,5 @@
 from lambler.resource.function._manager import LambdaManager
-from lambler.resource.role._role import Role
+from ..role import Role
 
 
 class LambdaFunction:

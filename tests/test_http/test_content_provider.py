@@ -40,6 +40,7 @@ def test_should_load_content_with_key_with_handle_call_after_use_content_call():
     assert provider.load__key == "my-content"
 
 
+# noinspection PyPep8Naming
 def test_should_load_with_None_scope_when_not_specified():
     api = HttpApi()
 

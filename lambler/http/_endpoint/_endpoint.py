@@ -21,7 +21,7 @@ class Endpoint:
         _validate_markers(signature)
         return cls(path, f, signature)
 
-    def match(self, event: Dict, context: Any) -> Optional[EndpointExecutor]:
+    def match(self, event: Dict, _: Any) -> Optional[EndpointExecutor]:
         http_event = HttpEvent.from_dict(event)
         if http_event.path != self._path:
             return None

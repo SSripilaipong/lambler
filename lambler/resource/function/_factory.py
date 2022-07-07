@@ -1,5 +1,6 @@
 import time
 
+# noinspection PyPackageRequirements
 import boto3
 
 from lambler.resource.function._manager import LambdaManager

@@ -1,4 +1,6 @@
+# noinspection PyPackageRequirements
 import pytest
+# noinspection PyPackageRequirements
 import requests
 
 from lambler.resource import get_or_create_lambda_function

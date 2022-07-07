@@ -31,7 +31,7 @@ class EndpointExecutor:
         if isinstance(marker, Header):
             value = marker.extract_event(self._event)
         elif isinstance(marker, Content):
-            value = self._content_provider.load(marker.key)
+            value = self._content_provider.load(marker.key, None)
         else:
             raise NotImplementedError()
         return value

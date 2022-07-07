@@ -57,3 +57,20 @@ def test_should_load_with_None_scope_when_not_specified():
     provider.load__scope = "something"
     lambler(simple_get_request(""), ...)
     assert provider.load__scope is None
+
+
+def test_should_load_with_custom_scope():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(_: str = Content("my-content", scope="here")):
+        pass
+
+    provider = ContentProviderMock()
+
+    lambler = Lambler()
+    lambler.use_content(provider)
+    lambler.handle(api)
+
+    lambler(simple_get_request(""), ...)
+    assert provider.load__scope == "here"

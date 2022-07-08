@@ -1,14 +1,17 @@
 import inspect
 from typing import Callable, Any, Dict
 
+from ._path import EndpointPath
 from .._event import HttpEvent
 from .._header import Header
+from .._param import Param
 from ...content import Content, ContentProviderSpace
 
 
 class EndpointExecutor:
-    def __init__(self, f: Callable, signature: inspect.Signature, event: HttpEvent, *,
+    def __init__(self, path: EndpointPath, f: Callable, signature: inspect.Signature, event: HttpEvent, *,
                  content_providers: ContentProviderSpace = None):
+        self._path = path
         self._f = f
         self._signature = signature
         self._event = event
@@ -28,10 +31,14 @@ class EndpointExecutor:
         return params
 
     def _extract_marker_value(self, marker: Any) -> Any:
+        params = self._path.extract_params(self._event.path)
+
         if isinstance(marker, Header):
             value = marker.extract_event(self._event)
         elif isinstance(marker, Content):
             value = self._content_providers.get(marker.scope).load(marker.key)
+        elif isinstance(marker, Param):
+            value = params[marker.key]
         else:
             raise NotImplementedError()
         return value

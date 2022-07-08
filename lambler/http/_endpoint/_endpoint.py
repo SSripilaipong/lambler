@@ -2,13 +2,14 @@ import inspect
 from typing import Callable, Dict, Any, Optional
 
 from ._executor import EndpointExecutor
+from ._path import EndpointPath
 from .._event import HttpEvent
 from .._header import Header
 from ...content import ContentProviderSpace
 
 
 class Endpoint:
-    def __init__(self, path: str, f: Callable, signature: inspect.Signature):
+    def __init__(self, path: EndpointPath, f: Callable, signature: inspect.Signature):
         self._path = path
         self._f = f
         self._signature = signature
@@ -19,14 +20,15 @@ class Endpoint:
     def create(cls, path: str, f: Callable) -> 'Endpoint':
         signature = inspect.signature(f)
         _validate_markers(signature)
-        return cls(path, f, signature)
+        return cls(EndpointPath.create(path), f, signature)
 
     def match(self, event: Dict, _: Any) -> Optional[EndpointExecutor]:
         http_event = HttpEvent.from_dict(event)
-        if http_event.path != self._path:
+        if not self._path.match(http_event.path):
             return None
 
-        return EndpointExecutor(self._f, self._signature, http_event, content_providers=self._content_providers)
+        return EndpointExecutor(self._path, self._f, self._signature, http_event,
+                                content_providers=self._content_providers)
 
     def set_content_provider_space(self, providers: ContentProviderSpace):
         self._content_providers = providers

@@ -67,3 +67,19 @@ def test_should_cast_data_type_to_list_when_using_list_typing():
     endpoint.q = None
     lambler(simple_get_request_with_query("", "q=123,q=456", {"q": "123,456"}), ...)
     assert endpoint.q == ["123", "456"]
+
+
+# noinspection DuplicatedCode
+def test_should_cast_data_type_to_list_when_using_list_typing_with_generic_primitive_type():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(q: List[int] = Query("q")):
+        endpoint.q = q
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    endpoint.q = None
+    lambler(simple_get_request_with_query("", "q=123,q=456", {"q": "123,456"}), ...)
+    assert endpoint.q == [123, 456]

@@ -2,6 +2,7 @@ from typing import Callable, Any, TypeVar, Dict, List
 
 from lambler.base import Handler
 from ._endpoint import Endpoint
+from ._response import HttpResponse
 from ..content import ContentProviderSpace
 
 T = TypeVar("T", bound=Callable)
@@ -27,8 +28,10 @@ class HttpApi(Handler):
             executor = endpoint.match(event, context)
             if executor is not None:
                 response = executor.execute()
-                if response is None:
-                    return http_response(200, "")
+                if response is not None:
+                    assert isinstance(response, HttpResponse)
+                    return response.to_dict()
+                return http_response(200, "")
 
 
 def http_response(status_code: int, body: str) -> Dict:

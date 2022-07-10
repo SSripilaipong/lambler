@@ -19,8 +19,8 @@ class EndpointExecutor:
 
         self._content_providers = content_providers
 
-    def execute(self):
-        self._f(**self._extract_params())
+    def execute(self) -> Any:
+        return self._f(**self._extract_params())
 
     def _extract_params(self) -> Dict[str, Any]:
         if len(self._signature.parameters) == 0:

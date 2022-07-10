@@ -4,6 +4,7 @@ from tests.test_http.factory import simple_get_request_with_query
 
 
 def test_should_pass_query_param_to_endpoint():
+    # noinspection DuplicatedCode
     api = HttpApi()
 
     @api.get("")

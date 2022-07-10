@@ -29,7 +29,7 @@ def simple_get_request(path: str, *, extra_headers: Dict[str, Any] = None, raw_q
     return event
 
 
-def simple_get_request_with_query(path: str, raw_query: str, query: Dict[str, Any]):
+def simple_get_request_with_query(path: str, raw_query: str, query: Dict[str, str]):
     event = {
         "version": "2.0", "routeKey": "$default", "rawPath": path, "rawQueryString": raw_query,
         "headers": {

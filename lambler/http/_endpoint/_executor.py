@@ -5,6 +5,7 @@ from ._path import EndpointPath
 from .._event import HttpEvent
 from .._header import Header
 from .._param import Param
+from .._query import Query
 from ...content import Content, ContentProviderSpace
 
 
@@ -39,6 +40,8 @@ class EndpointExecutor:
             value = self._content_providers.get(marker.scope).load(marker.key)
         elif isinstance(marker, Param):
             value = params[marker.key]
+        elif isinstance(marker, Query):
+            value = self._event.query_params[marker.key]
         else:
             raise NotImplementedError()
         return value

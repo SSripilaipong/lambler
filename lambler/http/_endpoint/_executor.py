@@ -1,5 +1,5 @@
 import inspect
-from typing import Callable, Any, Dict
+from typing import Callable, Any, Dict, Type
 
 from ._path import EndpointPath
 from .._event import HttpEvent
@@ -26,12 +26,12 @@ class EndpointExecutor:
         if len(self._signature.parameters) == 0:
             return {}
 
-        params = {name: self._extract_marker_value(marker=param.default)
+        params = {name: self._extract_marker_value(marker=param.default, type_=param.annotation)
                   for name, param in self._signature.parameters.items()}
 
         return params
 
-    def _extract_marker_value(self, marker: Any) -> Any:
+    def _extract_marker_value(self, marker: Any, type_: Type) -> Any:
         params = self._path.extract_params(self._event.path)
 
         if isinstance(marker, Header):
@@ -41,7 +41,7 @@ class EndpointExecutor:
         elif isinstance(marker, Param):
             value = params[marker.key]
         elif isinstance(marker, Query):
-            value = self._event.query_params[marker.key]
+            value = type_(self._event.query_params[marker.key])
         else:
             raise NotImplementedError()
         return value

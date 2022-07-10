@@ -17,8 +17,7 @@ class Lambler:
         self._ensure_handler_with_content_provider()
 
     def __call__(self, event: Dict, context: Any):
-        for handler in self._handlers:
-            handler.handle(event, context)
+        return self._handlers[0].handle(event, context)
 
     def use_content(self, provider: ContentProviderAllowedType):
         self._content_providers = _make_content_provider_space(provider)

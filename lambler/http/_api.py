@@ -26,5 +26,18 @@ class HttpApi(Handler):
         for endpoint in self._endpoints:
             executor = endpoint.match(event, context)
             if executor is not None:
-                executor.execute()
-                break
+                response = executor.execute()
+                if response is None:
+                    return http_response(200, "")
+
+
+def http_response(status_code: int, body: str) -> Dict:
+    return {
+        "statusCode": status_code,
+        "headers": {
+            "Content-Type": "text/plain",
+        },
+        "body": body,
+        "cookies": [],
+        "isBase64Encoded": False
+    }

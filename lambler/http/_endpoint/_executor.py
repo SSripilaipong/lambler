@@ -41,7 +41,14 @@ class EndpointExecutor:
         elif isinstance(marker, Param):
             value = params[marker.key]
         elif isinstance(marker, Query):
-            value = type_(self._event.query_params[marker.key])
+            value = _extract_query(marker, self._event, type_)
         else:
             raise NotImplementedError()
         return value
+
+
+def _extract_query(marker: Query, event: HttpEvent, type_: Type):
+    value = event.query_params[marker.key]
+    if type_ is not list:
+        return type_(value)
+    return value.split(",")

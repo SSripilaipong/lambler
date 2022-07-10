@@ -1,3 +1,5 @@
+from typing import List
+
 from lambler import Lambler
 from lambler.http import HttpApi, Query
 from tests.test_http.factory import simple_get_request_with_query
@@ -41,6 +43,22 @@ def test_should_cast_data_type_to_list():
 
     @api.get("")
     def endpoint(q: list = Query("q")):
+        endpoint.q = q
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    endpoint.q = None
+    lambler(simple_get_request_with_query("", "q=123,q=456", {"q": "123,456"}), ...)
+    assert endpoint.q == ["123", "456"]
+
+
+# noinspection DuplicatedCode
+def test_should_cast_data_type_to_list_when_using_list_typing():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(q: List = Query("q")):
         endpoint.q = q
 
     lambler = Lambler()

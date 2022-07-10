@@ -1,5 +1,5 @@
 import inspect
-from typing import Callable, Any, Dict, Type
+from typing import Callable, Any, Dict, Type, List
 
 from ._path import EndpointPath
 from .._event import HttpEvent
@@ -49,6 +49,6 @@ class EndpointExecutor:
 
 def _extract_query(marker: Query, event: HttpEvent, type_: Type):
     value = event.query_params[marker.key]
-    if type_ is not list:
-        return type_(value)
-    return value.split(",")
+    if type_ in (list, List):
+        return value.split(",")
+    return type_(value)

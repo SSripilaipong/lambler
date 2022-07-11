@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from lambler import Lambler
-from lambler.http import HttpApi, HttpResponse
+from lambler.http import HttpApi, HttpResponse, JsonResponse
 from tests.test_http.factory import simple_get_request
 
 
@@ -43,6 +43,28 @@ def test_should_return_response_from_HttpResponse_returned_by_endpoint():
             "my-header": "yeah"
         },
         "body": "ok!",
+        "cookies": [],
+        "isBase64Encoded": False,
+    }
+
+
+# noinspection PyPep8Naming
+def test_should_return_response_from_JsonResponse_returned_by_endpoint():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint():
+        return JsonResponse(HTTPStatus.ACCEPTED, {"message": "ok", "hello": "world"})
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    assert lambler(simple_get_request(""), ...) == {
+        "statusCode": 202,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": {"message": "ok", "hello": "world"},
         "cookies": [],
         "isBase64Encoded": False,
     }

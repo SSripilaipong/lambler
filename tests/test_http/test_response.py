@@ -1,8 +1,7 @@
 from http import HTTPStatus
 
 from lambler import Lambler
-from lambler.http import HttpApi, HttpResponse, JsonResponse
-from lambler.http._response import HtmlResponse
+from lambler.http import HttpApi, HttpResponse, JsonResponse, HtmlResponse
 from tests.test_http.factory import simple_get_request
 
 

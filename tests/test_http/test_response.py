@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 from lambler import Lambler
 from lambler.http import HttpApi, HttpResponse, JsonResponse
+from lambler.http._response import HtmlResponse
 from tests.test_http.factory import simple_get_request
 
 
@@ -65,6 +66,28 @@ def test_should_return_response_from_JsonResponse_returned_by_endpoint():
             "Content-Type": "application/json"
         },
         "body": {"message": "ok", "hello": "world"},
+        "cookies": [],
+        "isBase64Encoded": False,
+    }
+
+
+# noinspection PyPep8Naming
+def test_should_return_html_response_from_HtmlResponse_returned_by_endpoint():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint():
+        return HtmlResponse(HTTPStatus.OK, '<html lang="en"></html>')
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    assert lambler(simple_get_request(""), ...) == {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": "text/html; charset=UTF-8"
+        },
+        "body": '<html lang="en"></html>',
         "cookies": [],
         "isBase64Encoded": False,
     }

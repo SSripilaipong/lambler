@@ -7,6 +7,7 @@ from .._header import Header
 from .._param import Param
 from .._query import Query
 from ...content import Content, ContentProviderSpace
+from ...template import Template, TemplateBase
 
 
 class EndpointExecutor:
@@ -42,6 +43,10 @@ class EndpointExecutor:
             value = params[marker.key]
         elif isinstance(marker, Query):
             value = _extract_query(marker, self._event, type_)
+        elif isinstance(marker, Template):
+            assert issubclass(type_, TemplateBase)
+            type_.load()
+            value = None
         else:
             raise NotImplementedError()
         return value

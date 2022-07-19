@@ -10,8 +10,9 @@ from tests.test_http.factory import simple_get_request
 def test_should_load_template():
     class MyTemplateMock(TemplateBase):
         @classmethod
-        def load(cls):
+        def load(cls) -> 'MyTemplateMock':
             cls.load__is_called = True
+            return cls()
 
     api = HttpApi()
 
@@ -30,8 +31,9 @@ def test_should_load_template():
 def test_should_pass_content_when_required():
     class MyTemplateMock(TemplateBase):
         @classmethod
-        def load(cls, content: str = Content("")):
+        def load(cls, content: str = Content("")) -> 'MyTemplateMock':
             cls.load__content = content
+            return cls()
 
     class ContentProviderMock(ContentProvider):
         def load(self, key: str) -> Any:
@@ -50,3 +52,26 @@ def test_should_pass_content_when_required():
     MyTemplateMock.load__content = None
     lambler(simple_get_request(""), ...)
     assert MyTemplateMock.load__content == "It's ME"
+
+
+def test_should_pass_template_instance():
+    class MyTemplateMock(TemplateBase):
+        def __init__(self, data: str):
+            self.data = data
+
+        @classmethod
+        def load(cls) -> 'MyTemplateMock':
+            return cls("Hello World")
+
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(template: MyTemplateMock = Template()):
+        endpoint.template__data = template.data
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    endpoint.template__data = None
+    lambler(simple_get_request(""), ...)
+    assert endpoint.template__data == "Hello World"

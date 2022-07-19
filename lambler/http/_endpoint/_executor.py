@@ -46,8 +46,7 @@ class EndpointExecutor:
             value = _extract_query(marker, self._event, type_)
         elif isinstance(marker, Template):
             assert issubclass(type_, TemplateBase)
-            type_.do_load(self._content_providers)
-            value = None
+            value = type_.do_load(self._content_providers)
         else:
             raise NotImplementedError()
         return value

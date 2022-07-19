@@ -6,6 +6,7 @@ from .._event import HttpEvent
 from .._header import Header
 from .._param import Param
 from .._query import Query
+from ... import content
 from ...content import Content, ContentProviderSpace
 from ...template import Template, TemplateBase
 
@@ -38,14 +39,14 @@ class EndpointExecutor:
         if isinstance(marker, Header):
             value = marker.extract_event(self._event)
         elif isinstance(marker, Content):
-            value = self._content_providers.get(marker.scope).load(marker.key)
+            value = content.build_marked_params(self._content_providers, marker)
         elif isinstance(marker, Param):
             value = params[marker.key]
         elif isinstance(marker, Query):
             value = _extract_query(marker, self._event, type_)
         elif isinstance(marker, Template):
             assert issubclass(type_, TemplateBase)
-            type_.load()
+            type_.do_load(self._content_providers)
             value = None
         else:
             raise NotImplementedError()

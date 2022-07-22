@@ -36,3 +36,18 @@ def test_should_not_match_partially():
     endpoint.is_called = False
     lambler(simple_get_request("/a"), ...)
     assert not endpoint.is_called
+
+
+def test_should_match_even_with_tailing_slash():
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint():
+        endpoint.is_called = True
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    endpoint.is_called = False
+    lambler(simple_get_request("/"), ...)
+    assert endpoint.is_called

@@ -10,7 +10,7 @@ class EndpointPath:
     @classmethod
     def create(cls, path: str) -> 'EndpointPath':
         keys = re.findall(r"\{(.*?)}", path)
-        pattern_str = '^' + re.sub(r"\{.*?}", r"(.*?)", path)
+        pattern_str = '^' + re.sub(r"\{.*?}", r"(.*?)", path) + '$'
         pattern = re.compile(pattern_str)
         return cls(pattern, keys)
 

@@ -24,10 +24,11 @@ class Endpoint:
 
     def match(self, event: Dict, _: Any) -> Optional[EndpointExecutor]:
         http_event = HttpEvent.from_dict(event)
-        if not self._path.match(http_event.path):
+        path_length, match = self._path.match(http_event.path)
+        if not match:
             return None
 
-        return EndpointExecutor(self._path, self._f, self._signature, http_event,
+        return EndpointExecutor(self._path, path_length, self._f, self._signature, http_event,
                                 content_providers=self._content_providers)
 
     def set_content_provider_space(self, providers: ContentProviderSpace):

@@ -24,14 +24,21 @@ class HttpApi(Handler):
             endpoint.set_content_provider_space(providers)
 
     def handle(self, event: Dict, context: Any):
+        longest_path_length = 0
+        longest_path_executor = None
+
         for endpoint in self._endpoints:
             executor = endpoint.match(event, context)
-            if executor is not None:
-                response = executor.execute()
-                if response is not None:
-                    assert isinstance(response, HttpResponse)
-                    return response.to_dict()
-                return http_response(200, "")
+            if executor is not None and executor.path_length > longest_path_length:
+                longest_path_length = executor.path_length
+                longest_path_executor = executor
+
+        if longest_path_executor is not None:
+            response = longest_path_executor.execute()
+            if response is not None:
+                assert isinstance(response, HttpResponse)
+                return response.to_dict()
+            return http_response(200, "")
 
 
 def http_response(status_code: int, body: str) -> Dict:

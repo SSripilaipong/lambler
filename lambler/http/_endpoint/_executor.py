@@ -12,8 +12,10 @@ from ...template import Template, TemplateBase
 
 
 class EndpointExecutor:
-    def __init__(self, path: EndpointPath, f: Callable, signature: inspect.Signature, event: HttpEvent, *,
+    def __init__(self, path: EndpointPath, path_length: int, f: Callable, signature: inspect.Signature,
+                 event: HttpEvent, *,
                  content_providers: ContentProviderSpace = None):
+        self.path_length = path_length
         self._path = path
         self._f = f
         self._signature = signature

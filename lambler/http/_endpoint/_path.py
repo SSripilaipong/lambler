@@ -14,8 +14,14 @@ class EndpointPath:
         pattern = re.compile(pattern_str)
         return cls(pattern, keys)
 
-    def match(self, path: str) -> bool:
-        return bool(self._pattern.match(path))
+    def match(self, path: str) -> (int, bool):
+        matched = self._pattern.match(path)
+        if matched is None:
+            return 0, False
+
+        start, end = matched.span()
+        length = end - start + 1
+        return length, True
 
     def extract_params(self, path: str) -> Dict[str, str]:
         params = self._pattern.findall(path)

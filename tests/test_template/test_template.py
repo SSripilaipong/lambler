@@ -101,3 +101,32 @@ def test_should_load_another_template_when_required():
     AnotherTemplate.load__is_called = False
     lambler(simple_get_request(""), ...)
     assert AnotherTemplate.load__is_called
+
+
+def test_should_pass_another_template_when_required():
+    class AnotherTemplate(TemplateBase):
+        def __init__(self):
+            self.value = "Yeah!"
+
+        @classmethod
+        def load(cls) -> 'AnotherTemplate':
+            return cls()
+
+    class MyTemplateMock(TemplateBase):
+        @classmethod
+        def load(cls, another_template: AnotherTemplate = Template()) -> 'MyTemplateMock':
+            cls.load__another_template_value = another_template.value
+            return cls()
+
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(_: MyTemplateMock = Template()):
+        pass
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    MyTemplateMock.load__another_template_value = None
+    lambler(simple_get_request(""), ...)
+    assert MyTemplateMock.load__another_template_value == "Yeah!"

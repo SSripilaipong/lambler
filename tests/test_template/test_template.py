@@ -75,3 +75,29 @@ def test_should_pass_template_instance():
     endpoint.template__data = None
     lambler(simple_get_request(""), ...)
     assert endpoint.template__data == "Hello World"
+
+
+def test_should_load_another_template_when_required():
+    class AnotherTemplate(TemplateBase):
+        @classmethod
+        def load(cls) -> 'AnotherTemplate':
+            cls.load__is_called = True
+            return cls()
+
+    class MyTemplateMock(TemplateBase):
+        @classmethod
+        def load(cls, another_template: AnotherTemplate = Template()) -> 'MyTemplateMock':
+            return cls()
+
+    api = HttpApi()
+
+    @api.get("")
+    def endpoint(_: MyTemplateMock = Template()):
+        pass
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    AnotherTemplate.load__is_called = False
+    lambler(simple_get_request(""), ...)
+    assert AnotherTemplate.load__is_called

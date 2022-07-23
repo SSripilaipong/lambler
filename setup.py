@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 NAME = 'lambler'
-VERSION = '0.0.5'
+VERSION = '0.0.6'
 URL = 'https://github.com/SSripilaipong/lambler'
 LICENSE = 'MIT'
 AUTHOR = 'SSripilaipong'

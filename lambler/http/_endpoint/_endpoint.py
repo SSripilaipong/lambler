@@ -1,5 +1,5 @@
 import inspect
-from typing import Callable, Dict, Any, Optional
+from typing import Callable, Any, Optional
 
 from ._executor import EndpointExecutor
 from ._path import EndpointPath
@@ -22,8 +22,7 @@ class Endpoint:
         _validate_markers(signature)
         return cls(EndpointPath.create(path), f, signature)
 
-    def match(self, event: Dict, _: Any) -> Optional[EndpointExecutor]:
-        http_event = HttpEvent.from_dict(event)
+    def match(self, http_event: HttpEvent, _: Any) -> Optional[EndpointExecutor]:
         path_length, match = self._path.match(http_event.path)
         if not match:
             return None

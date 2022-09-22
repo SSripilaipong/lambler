@@ -2,6 +2,7 @@ from typing import Callable, Any, TypeVar, Dict, List
 
 from lambler.base import Handler
 from ._endpoint import Endpoint
+from ._event import HttpEvent
 from ._response import HttpResponse
 from ..content import ContentProviderSpace
 
@@ -27,8 +28,9 @@ class HttpApi(Handler):
         longest_path_length = 0
         longest_path_executor = None
 
+        http_event = HttpEvent.from_dict(event)
         for endpoint in self._endpoints:
-            executor = endpoint.match(event, context)
+            executor = endpoint.match(http_event, context)
             if executor is not None and executor.path_length > longest_path_length:
                 longest_path_length = executor.path_length
                 longest_path_executor = executor

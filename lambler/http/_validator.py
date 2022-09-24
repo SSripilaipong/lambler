@@ -18,6 +18,19 @@ class HttpResponseValidatorBase(ABC):
         pass
 
 
+class AwsHttpResponseValidator(HttpResponseValidatorBase):
+    def validate(self, raw: Any) -> Dict:
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "text/plain"
+            },
+            "body": "",
+            "cookies": [],
+            "isBase64Encoded": False,
+        }
+
+
 class AwsHttpRequestValidator(HttpRequestValidatorBase):
     def validate(self, raw: Dict) -> HttpEvent:
         return HttpEvent(

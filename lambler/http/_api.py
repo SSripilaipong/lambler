@@ -38,5 +38,5 @@ class HttpApiBase(Handler):
                 longest_path_executor = executor
 
         if longest_path_executor is not None:
-            _ = longest_path_executor.execute()
-            return self._response_validator.validate(None)
+            response_raw = longest_path_executor.execute()
+            return self._response_validator.validate(response_raw)

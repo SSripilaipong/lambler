@@ -1,9 +1,9 @@
 from typing import Callable, Any, TypeVar, Dict, List
 
 from lambler.base import Handler
-from . import AwsHttpRequestValidator, AwsHttpResponseValidator
 from ._endpoint import Endpoint
-from ._validator import HttpRequestValidatorBase, HttpResponseValidatorBase
+from ._validator import HttpRequestValidatorBase, HttpResponseValidatorBase, AwsHttpRequestValidator, \
+    AwsHttpResponseValidator
 from ..content import ContentProviderSpace
 
 T = TypeVar("T", bound=Callable)

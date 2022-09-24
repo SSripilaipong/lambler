@@ -6,7 +6,7 @@ from lambler.content import ContentProviderSpace
 
 class Handler(ABC):
     @abstractmethod
-    def handle(self, event: Dict, context: Any):
+    def handle(self, event: Dict, context: Any) -> Any:
         pass
 
     @abstractmethod

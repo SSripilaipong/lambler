@@ -2,11 +2,13 @@ from http import HTTPStatus
 
 from lambler import Lambler
 from lambler.http import HttpResponse, JsonResponse, HtmlResponse
-from tests.test_http.http_api_factory import create_http_api_for_test
+from tests.test_http.http_api_factory import create_http_api_for_test, create_http_api_for_test_with_response_validator
+from tests.test_http.response_validator_mock import ResponseValidatorMock
 
 
-def test_should_return_empty_response_with_status_code_200_by_default():
-    api = create_http_api_for_test()
+def test_should_validate_response():
+    validator = ResponseValidatorMock()
+    api = create_http_api_for_test_with_response_validator(validator)
 
     @api.get("")
     def endpoint():
@@ -14,16 +16,9 @@ def test_should_return_empty_response_with_status_code_200_by_default():
 
     lambler = Lambler()
     lambler.handle(api)
+    lambler({}, ...)
 
-    assert lambler({}, ...) == {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "text/plain",
-        },
-        "body": "",
-        "cookies": [],
-        "isBase64Encoded": False,
-    }
+    assert validator.validate__is_called
 
 
 # noinspection PyPep8Naming

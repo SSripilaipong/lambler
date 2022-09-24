@@ -2,16 +2,18 @@ from typing import Callable, Any, TypeVar, Dict, List
 
 from lambler.base import Handler
 from ._endpoint import Endpoint
-from ._request_validator import HttpRequestValidatorBase
 from ._response import HttpResponse
+from ._validator import HttpRequestValidatorBase, HttpResponseValidatorBase
 from ..content import ContentProviderSpace
 
 T = TypeVar("T", bound=Callable)
 
 
 class HttpApiBase(Handler):
-    def __init__(self, request_validator: HttpRequestValidatorBase):
+    def __init__(self, request_validator: HttpRequestValidatorBase, response_validator: HttpResponseValidatorBase):
         self._request_validator = request_validator
+        self._response_validator = response_validator
+
         self._endpoints: List[Endpoint] = []
 
     def get(self, path: str) -> Callable[[Callable], Any]:
@@ -25,7 +27,7 @@ class HttpApiBase(Handler):
         for endpoint in self._endpoints:
             endpoint.set_content_provider_space(providers)
 
-    def handle(self, event: Dict, context: Any):
+    def handle(self, event: Dict, context: Any) -> Dict:
         longest_path_length = 0
         longest_path_executor = None
 
@@ -38,9 +40,11 @@ class HttpApiBase(Handler):
 
         if longest_path_executor is not None:
             response = longest_path_executor.execute()
+            self._response_validator.validate(None)
             if response is not None:
                 assert isinstance(response, HttpResponse)
                 return response.to_dict()
+
             return http_response(200, "")
 
 

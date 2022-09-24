@@ -2,9 +2,9 @@ from typing import Any
 
 from lambler import Lambler
 from lambler.content import Content, ContentProvider
-from lambler.http import HttpApi
 from lambler.template import Template, TemplateBase
-from tests.test_http.factory import simple_get_request
+from tests.test_http.http_api_factory import create_http_api_for_test
+from tests.test_http.request_factory import simple_get_request
 
 
 def test_should_load_template():
@@ -14,7 +14,7 @@ def test_should_load_template():
             cls.load__is_called = True
             return cls()
 
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: MyTemplateMock = Template()):
@@ -39,7 +39,7 @@ def test_should_pass_content_when_required():
         def load(self, key: str) -> Any:
             return "It's ME"
 
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: MyTemplateMock = Template()):
@@ -63,7 +63,7 @@ def test_should_pass_template_instance():
         def load(cls) -> 'MyTemplateMock':
             return cls("Hello World")
 
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(template: MyTemplateMock = Template()):
@@ -89,7 +89,7 @@ def test_should_load_another_template_when_required():
         def load(cls, another_template: AnotherTemplate = Template()) -> 'MyTemplateMock':
             return cls()
 
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: MyTemplateMock = Template()):
@@ -118,7 +118,7 @@ def test_should_pass_another_template_when_required():
             cls.load__another_template_value = another_template.value
             return cls()
 
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: MyTemplateMock = Template()):

@@ -1,12 +1,13 @@
 from http import HTTPStatus
 
 from lambler import Lambler
-from lambler.http import HttpApi, HttpResponse, JsonResponse, HtmlResponse
-from tests.test_http.factory import simple_get_request
+from lambler.http import HttpResponse, JsonResponse, HtmlResponse
+from tests.test_http.http_api_factory import create_http_api_for_test
+from tests.test_http.request_factory import simple_get_request
 
 
 def test_should_return_empty_response_with_status_code_200_by_default():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint():
@@ -28,7 +29,7 @@ def test_should_return_empty_response_with_status_code_200_by_default():
 
 # noinspection PyPep8Naming
 def test_should_return_response_from_HttpResponse_returned_by_endpoint():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint():
@@ -50,7 +51,7 @@ def test_should_return_response_from_HttpResponse_returned_by_endpoint():
 
 # noinspection PyPep8Naming
 def test_should_return_response_from_JsonResponse_returned_by_endpoint():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint():
@@ -72,7 +73,7 @@ def test_should_return_response_from_JsonResponse_returned_by_endpoint():
 
 # noinspection PyPep8Naming
 def test_should_return_html_response_from_HtmlResponse_returned_by_endpoint():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint():

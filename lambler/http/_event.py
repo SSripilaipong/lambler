@@ -9,4 +9,4 @@ class HttpEvent:
 
     @classmethod
     def from_dict(cls, raw: Dict) -> 'HttpEvent':
-        return cls(raw["rawPath"], raw["headers"], raw.get("queryStringParameters", {}))
+        return cls(raw.get("rawPath", ""), raw.get("headers", {}), raw.get("queryStringParameters", {}))

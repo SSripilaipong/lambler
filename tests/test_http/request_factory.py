@@ -4,7 +4,6 @@ from typing import Dict, Any
 def simple_get_request(path: str, *, extra_headers: Dict[str, Any] = None, raw_query: str = "",
                        query: Dict[str, Any] = None):
     extra_headers = extra_headers or {}
-    query = query or {}
 
     event = {
         "version": "2.0", "routeKey": "$default", "rawPath": path, "rawQueryString": raw_query,

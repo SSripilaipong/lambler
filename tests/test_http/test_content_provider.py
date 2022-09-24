@@ -1,13 +1,12 @@
 from lambler import Lambler
 from lambler.content import Content
-from lambler.http import HttpApi
-
 from .content_provider_mock import ContentProviderMock
-from .factory import simple_get_request
+from .http_api_factory import create_http_api_for_test
+from .request_factory import simple_get_request
 
 
 def test_should_load_content_with_key():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: str = Content("my-content")):
@@ -24,7 +23,7 @@ def test_should_load_content_with_key():
 
 
 def test_should_load_content_with_key_with_handle_call_after_use_content_call():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: str = Content("my-content")):
@@ -42,7 +41,7 @@ def test_should_load_content_with_key_with_handle_call_after_use_content_call():
 
 # noinspection PyPep8Naming
 def test_should_load_from_provider_in_None_scope_by_default():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: str = Content("my-content")):
@@ -60,7 +59,7 @@ def test_should_load_from_provider_in_None_scope_by_default():
 
 
 def test_should_load_from_provider_with_custom_scope():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: str = Content("my-content", scope="here")):
@@ -77,7 +76,7 @@ def test_should_load_from_provider_with_custom_scope():
 
 
 def test_should_load_only_from_provider_with_specified_scope():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(_: str = Content("my-content", scope="here")):
@@ -98,7 +97,7 @@ def test_should_load_only_from_provider_with_specified_scope():
 
 
 def test_should_pass_loaded_content_to_endpoint():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(content: str = Content("my-content")):

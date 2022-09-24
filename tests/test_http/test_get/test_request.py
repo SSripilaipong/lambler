@@ -1,10 +1,10 @@
 from lambler import Lambler
-from lambler.http import HttpApi
-from tests.test_http.factory import simple_get_request
+from tests.test_http.http_api_factory import create_http_api_for_test
+from tests.test_http.request_factory import simple_get_request
 
 
 def test_should_call_endpoint():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("/")
     def endpoint():
@@ -19,7 +19,7 @@ def test_should_call_endpoint():
 
 
 def test_should_select_endpoint_by_path():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("/1")
     def endpoint1():

@@ -3,14 +3,16 @@ from typing import Callable, Any, TypeVar, Dict, List
 from lambler.base import Handler
 from ._endpoint import Endpoint
 from ._event import HttpEvent
+from ._request_validator import HttpRequestValidatorBase
 from ._response import HttpResponse
 from ..content import ContentProviderSpace
 
 T = TypeVar("T", bound=Callable)
 
 
-class HttpApi(Handler):
-    def __init__(self):
+class HttpApiBase(Handler):
+    def __init__(self, request_validator: HttpRequestValidatorBase):
+        self._request_validator = request_validator
         self._endpoints: List[Endpoint] = []
 
     def get(self, path: str) -> Callable[[Callable], Any]:
@@ -28,6 +30,7 @@ class HttpApi(Handler):
         longest_path_length = 0
         longest_path_executor = None
 
+        self._request_validator.validate(event)
         http_event = HttpEvent.from_dict(event)
         for endpoint in self._endpoints:
             executor = endpoint.match(http_event, context)

@@ -1,13 +1,14 @@
 from typing import List
 
 from lambler import Lambler
-from lambler.http import HttpApi, Query
-from tests.test_http.factory import simple_get_request_with_query
+from lambler.http import Query
+from tests.test_http.http_api_factory import create_http_api_for_test
+from tests.test_http.request_factory import simple_get_request_with_query
 
 
 # noinspection DuplicatedCode
 def test_should_pass_query_param_to_endpoint():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(q: str = Query("q")):
@@ -23,7 +24,7 @@ def test_should_pass_query_param_to_endpoint():
 
 # noinspection DuplicatedCode
 def test_should_cast_data_type_to_primitives():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(q: int = Query("q")):
@@ -39,7 +40,7 @@ def test_should_cast_data_type_to_primitives():
 
 # noinspection DuplicatedCode
 def test_should_cast_data_type_to_list():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(q: list = Query("q")):
@@ -55,7 +56,7 @@ def test_should_cast_data_type_to_list():
 
 # noinspection DuplicatedCode
 def test_should_cast_data_type_to_list_when_using_list_typing():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(q: List = Query("q")):
@@ -71,7 +72,7 @@ def test_should_cast_data_type_to_list_when_using_list_typing():
 
 # noinspection DuplicatedCode
 def test_should_cast_data_type_to_list_when_using_list_typing_with_generic_primitive_type():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(q: List[int] = Query("q")):

@@ -1,10 +1,10 @@
 from lambler import Lambler
-from lambler.http import HttpApi
-from tests.test_http.factory import simple_get_request
+from tests.test_http.http_api_factory import create_http_api_for_test
+from tests.test_http.request_factory import simple_get_request
 
 
 def test_should_match_the_long_path():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def short():
@@ -24,7 +24,7 @@ def test_should_match_the_long_path():
 
 
 def test_should_not_match_partially():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint():
@@ -39,7 +39,7 @@ def test_should_not_match_partially():
 
 
 def test_should_match_even_with_tailing_slash():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint():

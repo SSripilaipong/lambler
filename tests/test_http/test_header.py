@@ -2,12 +2,13 @@
 from pytest import raises
 
 from lambler import Lambler
-from lambler.http import HttpApi, Header
-from tests.test_http.factory import simple_get_request
+from lambler.http import Header
+from tests.test_http.http_api_factory import create_http_api_for_test
+from tests.test_http.request_factory import simple_get_request
 
 
 def test_should_pass_specified_header_value_from_key():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(my_name: str = Header("my-name")):
@@ -22,7 +23,7 @@ def test_should_pass_specified_header_value_from_key():
 
 
 def test_should_pass_multiple_header_values():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     @api.get("")
     def endpoint(a: str = Header("my-a"), b: str = Header("my-b")):
@@ -39,7 +40,7 @@ def test_should_pass_multiple_header_values():
 
 # noinspection PyPep8Naming
 def test_should_raise_TypeError_when_type_annotation_is_not_string():
-    api = HttpApi()
+    api = create_http_api_for_test()
 
     with raises(TypeError) as e:
         @api.get("")

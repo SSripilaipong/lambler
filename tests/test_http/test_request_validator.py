@@ -14,14 +14,13 @@ def test_should_validate_request():
     lambler = Lambler()
     lambler.handle(api)
 
-    endpoint.q = None
     lambler({
         "path": "/my/path",
         "headers": {"my": "header", "hello": "world"},
-        "query_params": {"my": "param", "query": 123},
+        "query_params": {"my": "param", "query": "123"},
     }, ...)
     assert validator.validate__raw == {
         "path": "/my/path",
         "headers": {"my": "header", "hello": "world"},
-        "query_params": {"my": "param", "query": 123},
+        "query_params": {"my": "param", "query": "123"},
     }

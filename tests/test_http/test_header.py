@@ -3,12 +3,12 @@ from pytest import raises
 
 from lambler import Lambler
 from lambler.http import Header
-from tests.test_http.http_api_factory import create_http_api_for_test
-from tests.test_http.request_factory import simple_get_request
+from tests.test_http.http_api_factory import create_http_api_for_test, RequestForTest, \
+    create_http_api_for_test_with_request
 
 
 def test_should_pass_specified_header_value_from_key():
-    api = create_http_api_for_test()
+    api = create_http_api_for_test_with_request(RequestForTest("", headers={"my-name": "CopyPasteEng"}))
 
     @api.get("")
     def endpoint(my_name: str = Header("my-name")):
@@ -18,12 +18,12 @@ def test_should_pass_specified_header_value_from_key():
     lambler.handle(api)
 
     endpoint.my_name = None
-    lambler(simple_get_request("", extra_headers={"my-name": "CopyPasteEng"}), ...)
+    lambler({}, ...)
     assert endpoint.my_name == "CopyPasteEng"
 
 
 def test_should_pass_multiple_header_values():
-    api = create_http_api_for_test()
+    api = create_http_api_for_test_with_request(RequestForTest("", headers={"my-a": "this is a", "my-b": "this is b"}))
 
     @api.get("")
     def endpoint(a: str = Header("my-a"), b: str = Header("my-b")):
@@ -34,7 +34,7 @@ def test_should_pass_multiple_header_values():
     lambler.handle(api)
 
     endpoint.a = endpoint.b = None
-    lambler(simple_get_request("", extra_headers={"my-a": "this is a", "my-b": "this is b"}), ...)
+    lambler({}, ...)
     assert endpoint.a == "this is a" and endpoint.b == "this is b"
 
 

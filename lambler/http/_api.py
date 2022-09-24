@@ -2,7 +2,6 @@ from typing import Callable, Any, TypeVar, Dict, List
 
 from lambler.base import Handler
 from ._endpoint import Endpoint
-from ._event import HttpEvent
 from ._request_validator import HttpRequestValidatorBase
 from ._response import HttpResponse
 from ..content import ContentProviderSpace
@@ -30,8 +29,7 @@ class HttpApiBase(Handler):
         longest_path_length = 0
         longest_path_executor = None
 
-        self._request_validator.validate(event)
-        http_event = HttpEvent.from_dict(event)
+        http_event = self._request_validator.validate(event)
         for endpoint in self._endpoints:
             executor = endpoint.match(http_event, context)
             if executor is not None and executor.path_length > longest_path_length:

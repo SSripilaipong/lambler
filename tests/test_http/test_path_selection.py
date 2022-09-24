@@ -4,7 +4,7 @@ from tests.test_http.http_api_factory import create_http_api_for_test_with_reque
 
 
 def test_should_match_the_long_path():
-    api = create_http_api_for_test_with_request(RequestForTest("/a"))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "/a"))
 
     @api.get("")
     def short():
@@ -24,7 +24,7 @@ def test_should_match_the_long_path():
 
 
 def test_should_not_match_partially():
-    api = create_http_api_for_test_with_request(RequestForTest("/a"))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "/a"))
 
     @api.get("")
     def endpoint():
@@ -39,7 +39,7 @@ def test_should_not_match_partially():
 
 
 def test_should_match_even_with_tailing_slash():
-    api = create_http_api_for_test_with_request(RequestForTest("/"))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "/"))
 
     @api.get("")
     def endpoint():

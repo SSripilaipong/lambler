@@ -5,7 +5,7 @@ from lambler.http import HttpRequestValidatorBase, HttpEvent
 
 class RequestValidatorMock(HttpRequestValidatorBase):
     def __init__(self, validate__return: HttpEvent = None):
-        self._validate__return = validate__return or HttpEvent(path="", headers={}, query_params={})
+        self._validate__return = validate__return or HttpEvent(method="GET", path="", headers={}, query_params={})
 
         self.validate__raw = None
 

@@ -8,7 +8,7 @@ from tests.test_http.http_api_factory import create_http_api_for_test_with_reque
 
 # noinspection DuplicatedCode
 def test_should_pass_query_param_to_endpoint():
-    api = create_http_api_for_test_with_request(RequestForTest("", query_params={"q": "123"}))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "", query_params={"q": "123"}))
 
     @api.get("")
     def endpoint(q: str = Query("q")):
@@ -24,7 +24,7 @@ def test_should_pass_query_param_to_endpoint():
 
 # noinspection DuplicatedCode
 def test_should_cast_data_type_to_primitives():
-    api = create_http_api_for_test_with_request(RequestForTest("", query_params={"q": "123"}))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "", query_params={"q": "123"}))
 
     @api.get("")
     def endpoint(q: int = Query("q")):
@@ -40,7 +40,7 @@ def test_should_cast_data_type_to_primitives():
 
 # noinspection DuplicatedCode
 def test_should_cast_data_type_to_list():
-    api = create_http_api_for_test_with_request(RequestForTest("", query_params={"q": "123,456"}))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "", query_params={"q": "123,456"}))
 
     @api.get("")
     def endpoint(q: list = Query("q")):
@@ -56,7 +56,7 @@ def test_should_cast_data_type_to_list():
 
 # noinspection DuplicatedCode
 def test_should_cast_data_type_to_list_when_using_list_typing():
-    api = create_http_api_for_test_with_request(RequestForTest("", query_params={"q": "123,456"}))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "", query_params={"q": "123,456"}))
 
     @api.get("")
     def endpoint(q: List = Query("q")):
@@ -72,7 +72,7 @@ def test_should_cast_data_type_to_list_when_using_list_typing():
 
 # noinspection DuplicatedCode
 def test_should_cast_data_type_to_list_when_using_list_typing_with_generic_primitive_type():
-    api = create_http_api_for_test_with_request(RequestForTest("", query_params={"q": "123,456"}))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "", query_params={"q": "123,456"}))
 
     @api.get("")
     def endpoint(q: List[int] = Query("q")):

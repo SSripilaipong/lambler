@@ -4,7 +4,7 @@ from tests.test_http.http_api_factory import create_http_api_for_test_with_reque
 
 
 def test_should_call_endpoint():
-    api = create_http_api_for_test_with_request(RequestForTest("/"))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "/"))
 
     @api.get("/")
     def endpoint():
@@ -19,7 +19,7 @@ def test_should_call_endpoint():
 
 
 def test_should_select_first_endpoint_by_path():
-    api = create_http_api_for_test_with_request(RequestForTest("/1"))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "/1"))
 
     # noinspection DuplicatedCode
     @api.get("/1")
@@ -39,7 +39,7 @@ def test_should_select_first_endpoint_by_path():
 
 
 def test_should_select_second_endpoint_by_path():
-    api = create_http_api_for_test_with_request(RequestForTest("/2"))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "/2"))
 
     # noinspection DuplicatedCode
     @api.get("/1")

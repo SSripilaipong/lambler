@@ -8,7 +8,7 @@ from tests.test_http.http_api_factory import create_http_api_for_test, RequestFo
 
 
 def test_should_pass_specified_header_value_from_key():
-    api = create_http_api_for_test_with_request(RequestForTest("", headers={"my-name": "CopyPasteEng"}))
+    api = create_http_api_for_test_with_request(RequestForTest("GET", "", headers={"my-name": "CopyPasteEng"}))
 
     @api.get("")
     def endpoint(my_name: str = Header("my-name")):
@@ -23,7 +23,8 @@ def test_should_pass_specified_header_value_from_key():
 
 
 def test_should_pass_multiple_header_values():
-    api = create_http_api_for_test_with_request(RequestForTest("", headers={"my-a": "this is a", "my-b": "this is b"}))
+    api = create_http_api_for_test_with_request(
+        RequestForTest("GET", "", headers={"my-a": "this is a", "my-b": "this is b"}))
 
     @api.get("")
     def endpoint(a: str = Header("my-a"), b: str = Header("my-b")):

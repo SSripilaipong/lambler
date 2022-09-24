@@ -7,7 +7,3 @@ class HttpEvent:
         self.path = path
         self.headers = headers
         self.query_params = query_params
-
-    @classmethod
-    def from_dict(cls, raw: Dict) -> 'HttpEvent':
-        return cls("", raw.get("rawPath", ""), raw.get("headers", {}), raw.get("queryStringParameters", {}))

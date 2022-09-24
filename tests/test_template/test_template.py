@@ -4,7 +4,6 @@ from lambler import Lambler
 from lambler.content import Content, ContentProvider
 from lambler.template import Template, TemplateBase
 from tests.test_http.http_api_factory import create_http_api_for_test
-from tests.test_http.request_factory import simple_get_request
 
 
 def test_should_load_template():
@@ -24,7 +23,7 @@ def test_should_load_template():
     lambler.handle(api)
 
     MyTemplateMock.load__is_called = False
-    lambler(simple_get_request(""), ...)
+    lambler({}, ...)
     assert MyTemplateMock.load__is_called
 
 
@@ -50,7 +49,7 @@ def test_should_pass_content_when_required():
     lambler.handle(api)
 
     MyTemplateMock.load__content = None
-    lambler(simple_get_request(""), ...)
+    lambler({}, ...)
     assert MyTemplateMock.load__content == "It's ME"
 
 
@@ -73,7 +72,7 @@ def test_should_pass_template_instance():
     lambler.handle(api)
 
     endpoint.template__data = None
-    lambler(simple_get_request(""), ...)
+    lambler({}, ...)
     assert endpoint.template__data == "Hello World"
 
 
@@ -99,7 +98,7 @@ def test_should_load_another_template_when_required():
     lambler.handle(api)
 
     AnotherTemplate.load__is_called = False
-    lambler(simple_get_request(""), ...)
+    lambler({}, ...)
     assert AnotherTemplate.load__is_called
 
 
@@ -128,5 +127,5 @@ def test_should_pass_another_template_when_required():
     lambler.handle(api)
 
     MyTemplateMock.load__another_template_value = None
-    lambler(simple_get_request(""), ...)
+    lambler({}, ...)
     assert MyTemplateMock.load__another_template_value == "Yeah!"

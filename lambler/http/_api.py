@@ -2,7 +2,6 @@ from typing import Callable, Any, TypeVar, Dict, List
 
 from lambler.base import Handler
 from ._endpoint import Endpoint
-from ._response import HttpResponse
 from ._validator import HttpRequestValidatorBase, HttpResponseValidatorBase
 from ..content import ContentProviderSpace
 
@@ -39,22 +38,5 @@ class HttpApiBase(Handler):
                 longest_path_executor = executor
 
         if longest_path_executor is not None:
-            response = longest_path_executor.execute()
-            self._response_validator.validate(None)
-            if response is not None:
-                assert isinstance(response, HttpResponse)
-                return response.to_dict()
-
-            return http_response(200, "")
-
-
-def http_response(status_code: int, body: str) -> Dict:
-    return {
-        "statusCode": status_code,
-        "headers": {
-            "Content-Type": "text/plain",
-        },
-        "body": body,
-        "cookies": [],
-        "isBase64Encoded": False
-    }
+            _ = longest_path_executor.execute()
+            return self._response_validator.validate(None)

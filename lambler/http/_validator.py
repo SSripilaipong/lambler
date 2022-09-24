@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 
 from ._event import HttpEvent
+from ._response import HttpResponse
 
 
 class HttpRequestValidatorBase(ABC):
@@ -20,6 +21,15 @@ class HttpResponseValidatorBase(ABC):
 
 class AwsHttpResponseValidator(HttpResponseValidatorBase):
     def validate(self, raw: Any) -> Dict:
+        if isinstance(raw, HttpResponse):
+            return {
+                "statusCode": raw.status_code,
+                "headers": raw.headers,
+                "body": raw.body,
+                "cookies": [],
+                "isBase64Encoded": False,
+            }
+
         return {
             "statusCode": 200,
             "headers": {

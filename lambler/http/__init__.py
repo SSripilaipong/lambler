@@ -1,4 +1,4 @@
-from ._api import HttpApiBase
+from ._api import HttpApi, HttpApiBase
 from ._event import HttpEvent
 from ._header import Header
 from ._param import Param

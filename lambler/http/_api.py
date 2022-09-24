@@ -1,6 +1,7 @@
 from typing import Callable, Any, TypeVar, Dict, List
 
 from lambler.base import Handler
+from . import AwsHttpRequestValidator, AwsHttpResponseValidator
 from ._endpoint import Endpoint
 from ._validator import HttpRequestValidatorBase, HttpResponseValidatorBase
 from ..content import ContentProviderSpace
@@ -40,3 +41,8 @@ class HttpApiBase(Handler):
         if longest_path_executor is not None:
             response_raw = longest_path_executor.execute()
             return self._response_validator.validate(response_raw)
+
+
+class HttpApi(HttpApiBase):
+    def __init__(self):
+        super(HttpApi, self).__init__(AwsHttpRequestValidator(), AwsHttpResponseValidator())

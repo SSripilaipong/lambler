@@ -23,6 +23,13 @@ class HttpApiBase(Handler):
 
         return decorator
 
+    def post(self, path: str):
+        def decorator(f: T) -> T:
+            self._endpoints.append(Endpoint.create(path, f))
+            return f
+
+        return decorator
+
     def set_content_provider_space(self, providers: ContentProviderSpace):
         for endpoint in self._endpoints:
             endpoint.set_content_provider_space(providers)

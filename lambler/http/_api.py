@@ -18,14 +18,14 @@ class HttpApiBase(Handler):
 
     def get(self, path: str) -> Callable[[Callable], Any]:
         def decorator(f: T) -> T:
-            self._endpoints.append(Endpoint.create(path, f))
+            self._endpoints.append(Endpoint.create(path, "GET", f))
             return f
 
         return decorator
 
     def post(self, path: str):
         def decorator(f: T) -> T:
-            self._endpoints.append(Endpoint.create(path, f))
+            self._endpoints.append(Endpoint.create(path, "POST", f))
             return f
 
         return decorator

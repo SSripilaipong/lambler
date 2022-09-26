@@ -9,20 +9,23 @@ from ...content import ContentProviderSpace
 
 
 class Endpoint:
-    def __init__(self, path: EndpointPath, f: Callable, signature: inspect.Signature):
+    def __init__(self, path: EndpointPath, method: str, f: Callable, signature: inspect.Signature):
         self._path = path
+        self._method = method
         self._f = f
         self._signature = signature
 
         self._content_providers: Optional[ContentProviderSpace] = None
 
     @classmethod
-    def create(cls, path: str, f: Callable) -> 'Endpoint':
+    def create(cls, path: str, method: str, f: Callable) -> 'Endpoint':
         signature = inspect.signature(f)
         _validate_markers(signature)
-        return cls(EndpointPath.create(path), f, signature)
+        return cls(EndpointPath.create(path), method, f, signature)
 
     def match(self, http_event: HttpEvent, _: Any) -> Optional[EndpointExecutor]:
+        if http_event.method != self._method:
+            return None
         path_length, match = self._path.match(http_event.path)
         if not match:
             return None

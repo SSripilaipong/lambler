@@ -51,3 +51,22 @@ def test_should_match_even_with_tailing_slash():
     endpoint.is_called = False
     lambler({}, ...)
     assert endpoint.is_called
+
+
+def test_should_match_with_post_method():
+    api = create_http_api_for_test_with_request(RequestForTest("POST", "/"))
+
+    @api.get("")
+    def get_endpoint():
+        get_endpoint.is_called = True
+
+    @api.post("")
+    def post_endpoint():
+        post_endpoint.is_called = True
+
+    lambler = Lambler()
+    lambler.handle(api)
+
+    get_endpoint.is_called = post_endpoint.is_called = False
+    lambler({}, ...)
+    assert post_endpoint.is_called and not get_endpoint.is_called
